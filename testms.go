@@ -4,59 +4,57 @@ import (
 	"fmt"
 )
 
-func IntersectArray(a []interface{}, b []interface{}) []interface{} {
-	var result []interface{}
-
+func IntersectArray(a []string, b []string) []string {
+	result := []string{}
 	for _, i := range a {
-		for _, y := range b {
-			if i == y {
+		for _, otherValue := range b {
+			if i == otherValue {
 				result = append(result, i)
 				break
 			}
 		}
 	}
-
 	return result
 }
 
-func MergeArray(a []interface{}, b []interface{}) []interface{} {
-	var result []interface{}
-
-	for _, i := range a {
-		found := false
-		for _, y := range result {
-			if i == y {
-				found = true
-				break
-			}
-		}
-		if !found {
-			result = append(result, i)
-		}
-	}
-
+func MergeArray(a []string, b []string) ([]string, []string) {
+	intersect := IntersectArray(a, b)
+	result1 := append([]string{}, a...)
+	result2 := []string{}
 	for _, i := range b {
 		found := false
-		for _, y := range result {
-			if i == y {
+		for _, intersectValue := range intersect {
+			if i == intersectValue {
 				found = true
 				break
 			}
 		}
 		if !found {
-			result = append(result, i)
+			result1 = append(result1, i)
+			result2 = append(result2, i)
 		}
 	}
-
-	return result
+	for _, i := range a {
+		found := false
+		for _, intersectValue := range intersect {
+			if i == intersectValue {
+				found = true
+				break
+			}
+		}
+		if !found {
+			result2 = append(result2, i)
+		}
+	}
+	return result1, result2
 }
 
 func main() {
-	a := []interface{}{"a", "b", "c"}
-	b := []interface{}{"b", "c", "d"}
+	a := []string{"a", "b", "c"}
+	b := []string{"b", "c", "d"}
 
-	intersect := IntersectArray(a, b)
+	fmt.Println("ข้อมูลที่ซ้ำกัน", IntersectArray(a, b))
+	fmt.Print("ข้อมูลที่รวมกัน และ ข้อมูลที่ตัดข้อมูลที่ซ้ำกัน")
 	fmt.Println(MergeArray(a, b))
-	fmt.Println(intersect)
 
 }
